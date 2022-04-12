@@ -1,0 +1,30 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+OrdererOrgs:
+  - Name: orderer
+    Domain: cityhub.org
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer0
+      - Hostname: orderer1
+      - Hostname: orderer2
+
+PeerOrgs:
+  - Name: n2m
+    Domain: n2m.cityhub.org
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+
+  - Name: pnu
+    Domain: pnu.cityhub.org
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+    Users:
+      Count: 1

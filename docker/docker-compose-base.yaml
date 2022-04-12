@@ -1,0 +1,362 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: "2"
+
+volumes:
+  orderer0.cityhub.org:
+  orderer1.cityhub.org:
+  orderer2.cityhub.org:
+  peer0.n2m.cityhub.org:
+  peer1.n2m.cityhub.org:
+  peer0.pnu.cityhub.org:
+  peer1.pnu.cityhub.org:
+
+networks:
+  iot:
+
+services:
+  orderer0.cityhub.org:
+    container_name: orderer0.cityhub.org
+    image: hyperledger/fabric-orderer:1.4.8
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=ordererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_KAFKA_TOPIC_REPLICATIONFACTOR=1
+      - ORDERER_KAFKA_VERBOSE=true
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ../build/channel-artifacts/system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ../build/channel-artifacts/crypto-config/ordererOrganizations/cityhub.org/orderers/orderer0.cityhub.org/msp:/var/hyperledger/orderer/msp
+      - ../build/channel-artifacts/crypto-config/ordererOrganizations/cityhub.org/orderers/orderer0.cityhub.org/tls/:/var/hyperledger/orderer/tls
+      - orderer0.cityhub.org:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+    networks:
+      - iot
+
+  orderer1.cityhub.org:
+    container_name: orderer1.cityhub.org
+    image: hyperledger/fabric-orderer:1.4.8
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=ordererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_KAFKA_TOPIC_REPLICATIONFACTOR=1
+      - ORDERER_KAFKA_VERBOSE=true
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ../build/channel-artifacts/system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ../build/channel-artifacts/crypto-config/ordererOrganizations/cityhub.org/orderers/orderer1.cityhub.org/msp:/var/hyperledger/orderer/msp
+      - ../build/channel-artifacts/crypto-config/ordererOrganizations/cityhub.org/orderers/orderer1.cityhub.org/tls/:/var/hyperledger/orderer/tls
+      - orderer1.cityhub.org:/var/hyperledger/production/orderer
+    ports:
+      - 8050:7050
+    networks:
+      - iot
+
+  orderer2.cityhub.org:
+    container_name: orderer2.cityhub.org
+    image: hyperledger/fabric-orderer:1.4.8
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=ordererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_KAFKA_TOPIC_REPLICATIONFACTOR=1
+      - ORDERER_KAFKA_VERBOSE=true
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ../build/channel-artifacts/system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ../build/channel-artifacts/crypto-config/ordererOrganizations/cityhub.org/orderers/orderer2.cityhub.org/msp:/var/hyperledger/orderer/msp
+      - ../build/channel-artifacts/crypto-config/ordererOrganizations/cityhub.org/orderers/orderer2.cityhub.org/tls/:/var/hyperledger/orderer/tls
+      - orderer2.cityhub.org:/var/hyperledger/production/orderer
+    ports:
+      - 9050:7050
+    networks:
+      - iot
+
+  peer0.n2m.cityhub.org:
+    container_name: peer0.n2m.cityhub.org
+    image: hyperledger/fabric-peer:1.4.8
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_iot
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer0.n2m.cityhub.org
+      - CORE_PEER_ADDRESS=peer0.n2m.cityhub.org:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.n2m.cityhub.org:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.n2m.cityhub.org:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.n2m.cityhub.org:7051
+      - CORE_PEER_LOCALMSPID=n2mMSP
+      #couch
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0.n2m.cityhub.org:5984
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../build/channel-artifacts/crypto-config/peerOrganizations/n2m.cityhub.org/peers/peer0.n2m.cityhub.org/msp:/etc/hyperledger/fabric/msp
+      - ../build/channel-artifacts/crypto-config/peerOrganizations/n2m.cityhub.org/peers/peer0.n2m.cityhub.org/tls:/etc/hyperledger/fabric/tls
+      - ../hyperledger:/hyperledger
+      - peer0.n2m.cityhub.org:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 7051:7051
+      - 7052:7052
+    networks:
+      - iot
+    depends_on:
+      - couchdb0.n2m.cityhub.org
+
+  couchdb0.n2m.cityhub.org:
+    container_name: couchdb0.n2m.cityhub.org
+    image: hyperledger/fabric-couchdb:latest
+    ports:
+      - "5984:5984"
+    environment:
+      DB_URL: http://localhost:5984/member_db
+    networks:
+      - iot
+
+  peer1.n2m.cityhub.org:
+    container_name: peer1.n2m.cityhub.org
+    image: hyperledger/fabric-peer:1.4.8
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_iot
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer1.n2m.cityhub.org
+      - CORE_PEER_ADDRESS=peer1.n2m.cityhub.org:8051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:8051
+      - CORE_PEER_CHAINCODEADDRESS=peer1.n2m.cityhub.org:8052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.n2m.cityhub.org:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.n2m.cityhub.org:7051
+      - CORE_PEER_LOCALMSPID=n2mMSP
+      #couch
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1.n2m.cityhub.org:5984
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../build/channel-artifacts/crypto-config/peerOrganizations/n2m.cityhub.org/peers/peer1.n2m.cityhub.org/msp:/etc/hyperledger/fabric/msp
+      - ../build/channel-artifacts/crypto-config/peerOrganizations/n2m.cityhub.org/peers/peer1.n2m.cityhub.org/tls:/etc/hyperledger/fabric/tls
+      - ../hyperledger:/hyperledger
+      - peer1.n2m.cityhub.org:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 8051:8051
+      - 8052:8052
+    networks:
+      - iot
+    depends_on:
+      - couchdb1.n2m.cityhub.org
+
+  couchdb1.n2m.cityhub.org:
+    container_name: couchdb1.n2m.cityhub.org
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      DB_URL: http://localhost:5984/member_db
+    ports:
+      - "6984:5984"
+    networks:
+      - iot
+
+  peer0.pnu.cityhub.org:
+    container_name: peer0.pnu.cityhub.org
+    image: hyperledger/fabric-peer:1.4.8
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_iot
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer0.pnu.cityhub.org
+      - CORE_PEER_ADDRESS=peer0.pnu.cityhub.org:9051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.pnu.cityhub.org:9052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.pnu.cityhub.org:9051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.pnu.cityhub.org:9051
+      - CORE_PEER_LOCALMSPID=pnuMSP
+      #couch
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0.pnu.cityhub.org:5984
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../build/channel-artifacts/crypto-config/peerOrganizations/pnu.cityhub.org/peers/peer0.pnu.cityhub.org/msp:/etc/hyperledger/fabric/msp
+      - ../build/channel-artifacts/crypto-config/peerOrganizations/pnu.cityhub.org/peers/peer0.pnu.cityhub.org/tls:/etc/hyperledger/fabric/tls
+      - ../hyperledger:/hyperledger
+      - peer0.pnu.cityhub.org:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 9051:9051
+      - 9052:9052
+    networks:
+      - iot
+    depends_on:
+      - couchdb0.pnu.cityhub.org
+
+  couchdb0.pnu.cityhub.org:
+    container_name: couchdb0.pnu.cityhub.org
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      DB_URL: http://localhost:5984/member_db
+    ports:
+      - "7984:5984"
+    networks:
+      - iot
+
+  peer1.pnu.cityhub.org:
+    container_name: peer1.pnu.cityhub.org
+    image: hyperledger/fabric-peer:1.4.8
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_iot
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer1.pnu.cityhub.org
+      - CORE_PEER_ADDRESS=peer1.pnu.cityhub.org:10051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:10051
+      - CORE_PEER_CHAINCODEADDRESS=peer1.pnu.cityhub.org:10052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:10052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.pnu.cityhub.org:9051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.pnu.cityhub.org:9051
+      - CORE_PEER_LOCALMSPID=pnuMSP
+      #couch
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1.pnu.cityhub.org:5984
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../build/channel-artifacts/crypto-config/peerOrganizations/pnu.cityhub.org/peers/peer1.pnu.cityhub.org/msp:/etc/hyperledger/fabric/msp
+      - ../build/channel-artifacts/crypto-config/peerOrganizations/pnu.cityhub.org/peers/peer1.pnu.cityhub.org/tls:/etc/hyperledger/fabric/tls
+      - ../hyperledger:/hyperledger
+      - peer1.pnu.cityhub.org:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 10051:10051
+      - 10052:10052
+    networks:
+      - iot
+    depends_on:
+      - couchdb1.pnu.cityhub.org
+
+  couchdb1.pnu.cityhub.org:
+    container_name: couchdb1.pnu.cityhub.org
+    image: hyperledger/fabric-couchdb:latest
+    ports:
+      - "8984:5984"
+    networks:
+      - iot
+
+  cli_n2m:
+    container_name: cli_n2m
+    image: hyperledger/fabric-tools:1.4.8
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+      - /var/run/:/host/var/run/
+      - ../build:/opt/gopath/src/github.com/hyperledger/fabric/peer/build/
+      - ../package/fabric:/opt/gopath/src/github.com/hyperledger/fabric/
+      - ../package/vendor:/vendor
+      - ../chaincode:/opt/gopath/src/github.com/chaincode
+      - ../ccp:/opt/gopath/src/github.com/hyperledger/fabric/peer/ccp/
+      # - ../hyperledger:/hyperledger
+    depends_on:
+      - peer0.n2m.cityhub.org
+      - peer0.pnu.cityhub.org
+    networks:
+      - iot

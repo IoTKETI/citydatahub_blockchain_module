@@ -1,0 +1,35 @@
+---
+name: test-network-${ORG}
+version: 1.0.0
+client:
+  organization: ${ORG}
+  connection:
+    timeout:
+      peer:
+        endorser: "300"
+organizations:
+  ${ORG}MSP:
+    mspid: ${MSPORG}MSP
+    peers:
+      - peer0.${ORG}.cityhub.org
+    certificateAuthorities:
+      - ca.${ORG}.cityhub.org
+peers:
+  peer0.${ORG}.cityhub.org:
+    url: grpcs://localhost:${P0PORT}
+    tlsCACerts:
+      pem: |
+        ${PEERPEM}
+    grpcOptions:
+      ssl-target-name-override: peer0.${ORG}.cityhub.org
+      hostnameOverride: peer0.${ORG}.cityhub.org
+certificateAuthorities:
+  ca.${ORG}.cityhub.org:
+    url: https://localhost:${CAPORT}
+    caName: ca.${ORG}.cityhub.org
+    tlsCACerts:
+      pem:
+        - |
+          ${CAPEM}
+    httpOptions:
+      verify: false

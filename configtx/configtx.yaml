@@ -1,0 +1,169 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+---
+Organizations:
+  - &OrdererOrg
+    Name: ordererMSP
+    ID: ordererMSP
+    MSPDir: crypto-config/ordererOrganizations/cityhub.org/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('ordererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('ordererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('ordererMSP.admin')"
+
+  - &N2M
+    Name: n2mMSP
+    ID: n2mMSP
+    MSPDir: crypto-config/peerOrganizations/n2m.cityhub.org/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('n2mMSP.member', 'n2mMSP.peer', 'n2mMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('n2mMSP.member', 'n2mMSP.peer', 'n2mMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('n2mMSP.admin')"
+    AnchorPeers:
+      - Host: peer0.n2m.cityhub.org
+        Port: 7051
+
+  - &PNU
+    Name: pnuMSP
+    ID: pnuMSP
+    MSPDir: crypto-config/peerOrganizations/pnu.cityhub.org/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('pnuMSP.member', 'pnuMSP.peer', 'pnuMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('pnuMSP.member', 'pnuMSP.peer', 'pnuMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('pnuMSP.admin')"
+    AnchorPeers:
+      - Host: peer0.pnu.cityhub.org
+        Port: 9051
+
+Capabilities:
+  Channel: &ChannelCapabilities
+    V1_4_3: true
+    V1_3: false
+    V1_1: false
+
+  Orderer: &OrdererCapabilities
+    V1_4_2: true
+    V1_1: false
+
+  Application: &ApplicationCapabilities
+    V1_4_2: true
+    V1_3: false
+    V1_2: false
+    V1_1: false
+
+Application: &ApplicationDefaults
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+
+  Capabilities:
+    <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+  OrdererType: etcdraft
+  Addresses:
+    - orderer0.cityhub.org:7050
+    - orderer1.cityhub.org:7050
+    - orderer2.cityhub.org:7050
+  EtcdRaft:
+    Consenters:
+      - Host: orderer0.cityhub.org
+        Port: 7050
+        ClientTLSCert: crypto-config/ordererOrganizations/cityhub.org/orderers/orderer0.cityhub.org/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/cityhub.org/orderers/orderer0.cityhub.org/tls/server.crt
+      - Host: orderer1.cityhub.org
+        Port: 7050
+        ClientTLSCert: crypto-config/ordererOrganizations/cityhub.org/orderers/orderer1.cityhub.org/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/cityhub.org/orderers/orderer1.cityhub.org/tls/server.crt
+      - Host: orderer2.cityhub.org
+        Port: 7050
+        ClientTLSCert: crypto-config/ordererOrganizations/cityhub.org/orderers/orderer2.cityhub.org/tls/server.crt
+        ServerTLSCert: crypto-config/ordererOrganizations/cityhub.org/orderers/orderer2.cityhub.org/tls/server.crt
+  BatchTimeout: 0.5s
+  BatchSize:
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+
+Channel: &ChannelDefaults
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+Profiles:
+  systemChannel:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+      Capabilities:
+        <<: *OrdererCapabilities
+    Consortiums:
+      Islab:
+        Organizations:
+          - *N2M
+          - *PNU
+
+  marketplace-channel:
+    Consortium: Islab
+    <<: *ChannelDefaults
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *N2M
+        - *PNU
+      Capabilities:
+        <<: *ApplicationCapabilities

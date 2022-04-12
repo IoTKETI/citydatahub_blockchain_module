@@ -1,0 +1,56 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: "2"
+
+networks:
+  iot:
+
+services:
+  ca.n2m.cityhub.org:
+    image: hyperledger/fabric-ca:latest
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_PORT=7054
+      - FABRIC_CA_SERVER_CA_NAME=ca.n2m.cityhub.org
+
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.n2m.cityhub.org-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${N2M_CA_PRIVATE_KEY}
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.n2m.cityhub.org-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${N2M_CA_PRIVATE_KEY}
+    ports:
+      - "7054:7054"
+      - "17054:17054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ../build/channel-artifacts/crypto-config/peerOrganizations/n2m.cityhub.org/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ../config/ca/n2m:/etc/hyperledger/fabric-ca-server
+    container_name: ca.n2m.cityhub.org
+    networks:
+      - iot
+
+  ca.pnu.cityhub.org:
+    image: hyperledger/fabric-ca:latest
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_PORT=8054
+      - FABRIC_CA_SERVER_CA_NAME=ca.pnu.cityhub.org
+
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.pnu.cityhub.org-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${PNU_CA_PRIVATE_KEY}
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.pnu.cityhub.org-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${PNU_CA_PRIVATE_KEY}
+    ports:
+      - "8054:8054"
+      - "18054:18054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ../build/channel-artifacts/crypto-config/peerOrganizations/pnu.cityhub.org/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ../config/ca/pnu:/etc/hyperledger/fabric-ca-server
+    container_name: ca.pnu.cityhub.org
+    networks:
+      - iot

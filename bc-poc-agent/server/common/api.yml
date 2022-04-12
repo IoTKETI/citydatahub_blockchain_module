@@ -1,0 +1,453 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Cityhub-BC
+  description: 블록체인 토큰기반 인센티브 플랫폼 API
+basePath: 
+tags:
+  - name: 인센티브 지급기록 관리
+    description: 인센티브 지급 기록관리 API
+  - name: 인센티브 토큰 관리
+    description: 인센티브 토큰 관리 API
+  - name: Specification
+    description: 블록체인 API specification
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+definitions:
+  UserBody:
+    type: object
+    properties:
+      userId:
+        type: string
+        example: cityhub
+      userPw:
+        type: string
+        example: cityhub
+      userName:
+        type: string
+        example: cityhub
+      userEmail:
+        type: string
+        example: cityhub@cityhub.org
+      userNickName:
+        type: string
+        example: cityhub
+      userTel:
+        type: string
+        example: none
+
+  UserBodyLogin:
+    type: object
+    properties:
+      userId:
+        type: string
+        example: cityhub
+      userPw:
+        type: string
+        example: cityhub
+
+  DeviceBody:
+    type: object
+    properties:
+      deviceId:
+        type: string
+        example: cityhub
+      deviceName:
+        type: string
+        example: mEMD
+      publicKey:
+        type: string
+        example: AAB3NzaC1yc2EAAAADAQABAAABAQDLzeLq4iSsudoZeMuQrwNnsxxrZgu7aR3JqQI9TzLP3L7HYXOp6Rln11tUFzSXiybi/lms12oE1t6bR7PQTiK7Bum0/Q5mgshehy1ILfzwN2ROOJVJWvV46K7W8CPXzTcKBo/urKcXiDTrKNOYE29yO+4vxyvkQOLlDezr4s9xnQIJKIWNA6bKC+8hCuTi2HGrWHR6VukeAFplNWo94cwT8+quPUO8oDCEbnOZqgWvep8ED/MN5dA/zuUJJiFFWFj1YdrB5n3u4A+GL0J8SAQoIxApfReRcno+99LG7Uh7kb5L81QWgsjGhlffEojj/8Dh4yQM6VB60nEEtfLB/+x
+
+  AuthHeader:
+    title: Authorization Header for User
+    name: Authorization
+    type: string
+    description: Authorization Bearer Token(JWT) for access cityhub blockchain service
+    in: header
+    required: true
+    default: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWRtaW5TeXN0ZW0iLCJ1c2VySWQiOiJlRFV3T1RvNlEwNDlRV1J0YVc1QWNHNTFMbU5wZEhsb2RXSXViM0puTEU5VlBXRmtiV2x1TEV3OVUyRnVJRVp5WVc1amFYTmpieXhUVkQxRFlXeHBabTl5Ym1saExFTTlWVk02T2tOT1BXTmhMbkJ1ZFM1amFYUjVhSFZpTG05eVp5eFBQWEJ1ZFM1amFYUjVhSFZpTG05eVp5eE1QVk5oYmlCR2NtRnVZMmx6WTI4c1UxUTlRMkZzYVdadmNtNXBZU3hEUFZWVCIsIm5pY2tuYW1lIjoicG51QWRtaW4iLCJlbWFpbCI6ImhvbmdnaWxkb25nQHBudS5hYy5rciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTU3MjE2NzU4NCwiZXhwIjoxOTk5OTk5OTk5LCJhdWQiOiJQTlVNU1AiLCJpc3MiOiJ1cm46ZGF0YWh1YjpjaXR5aHViOnNlcmN1cml0eSJ9.p8I_6YXjNikfWqkFMtqKDfbXp_Bs68UmAWVtLQ4k9sKGhbSlLr9N3SQ7S8Iuo1n2I14zkuVNwXOm7a8l0i3m3krSvGaphoAlrzGpTqkTD5rrOhZfdKUnhZCzuUnWBNeYV-pVTHqZnnehT7eD_hPW0RUJ8E1Zo6GpG6j5Fl7Sx7xaJmf3_ufg3GnjilQuigTD3ji7o-qGckCBZTWkCYgFNK6LXs6UmAAiBUvmCoqedvDOsWeDm5Jugu8gmKb-Z1UoFzxaeBq76ZBazPAPq4vLTLXh2e0GpTNkXKiOy6uvgqyd6jnDNDM22f3hD5STDZ0i8Agolkq_Nk-7OXERz0f5pg
+
+  IncentiveBody:
+    title: Incentive
+    type: object
+    required:      
+      - fromId
+      - toId
+      - amount
+      - additional            
+    properties:
+      fromId:
+        type: string
+        example: admin
+        default: admin
+      toId:
+        type: string
+        example: user1
+        default: user1
+      amount:
+        type: string
+        example: "1000"
+        default: "1000"
+      additional:
+        type: string
+        example: "{\"datasetId\":\"DS0001\", \"type\":\"buy\"}"
+        default: "{\"datasetId\":\"DS0001\", \"type\":\"buy\"}"
+
+  IncentiveBody2:
+    title: IncentiveQuery
+    type: object
+    required:
+      - userId
+      - termStart
+      - termEnd
+    properties:
+      userId:
+        type: string
+        example: user1
+        default: user1
+      termStart:
+        type: string
+        example: "1603960220"
+        default: "1603960220"
+      termEnd:
+        type: string
+        example: "1803960330"
+        default: "1803960330"
+
+  ReceiveBody:
+    title: receive
+    type: object
+    required:
+      - receiveId
+      - femsId
+      - termStart
+      - termEnd
+      - power
+    properties:
+      receiveId:
+        type: string
+        example: "1"
+        default: "1"
+      femsId:
+        type: string
+        example: cityhub2
+        default: cityhub2
+      termStart:
+        type: string
+        example: "20191001060020"
+        default: "20191001060020"
+      termEnd:
+        type: string
+        example: "20191001063042"
+        default: "20191001063042"
+      power:
+        type: string
+        example: "3000"
+        default: "3000"
+
+  BalanceOfBody:
+    title: balanceOf
+    type: object
+    required:
+      - userId
+    properties:
+      userId:
+        type: string
+        example: user1
+
+  TokenGenerateBody:
+      title: generate
+      type: object
+      required:
+        - amount
+      properties:      
+        amount:
+          type: string
+          example: "1000"
+
+  TokenTransferBody:
+    title: transfer
+    type: object
+    required:
+      - fromUserId      
+      - toUserId
+      - amount
+    properties:      
+      fromUserId:
+        type: string
+        example: admin
+        default: admin
+      toUserId:
+        type: string
+        example: user1
+        default: user1
+      amount:
+        type: string
+        example: "10000"
+
+  ApproveBody:
+    title: approve
+    type: object
+    required:
+      - ownerId
+      - spenderId
+      - amount
+    properties:
+      ownerId:
+        type: string
+        example: user1
+        default: user1
+      spenderId:
+        type: string
+        example: admin
+        default: admin
+      amount:
+        type: string
+        example: "1000"
+        default: "1000"
+
+  AllowanceBody:
+    title: allowance
+    type: object
+    required:
+      - ownerId      
+      - spenderId
+    properties:
+      ownerId:
+        type: string
+        example: user1
+        default: user1
+      spenderId:
+        type: string
+        example: admin
+        default: admin
+  TransferFromBody:
+    title: transferFrom
+    type: object
+    required:
+      - invokerId      
+      - fromUserId      
+      - toUserId
+      - amount
+    properties:
+      invokerId:
+        type: string
+        example: admin
+        default: admin
+      fromUserId:
+        type: string
+        example: user1
+        default: user1
+      toUserId:
+        type: string
+        example: user2
+        default: user2
+      amount:
+        type: string
+        example: "1000"
+        default: "1000"
+
+paths:
+  /incentive/transfer:
+    post:
+      tags:
+        - 인센티브 지급기록 관리
+      description: 인센티브 지급정보 저장
+      parameters:
+        - $ref: "#/definitions/AuthHeader"
+        - name: 인센티브 지급 정보 저장
+          in: body
+          description: 마켓플레이스 거래에 대한 인센티브 정보 저장
+          required: true
+          schema:
+            $ref: "#/definitions/IncentiveBody"
+      responses:
+        200:
+          description: OK
+        404:
+          description: Request Failed  
+
+
+  /incentive/query:
+    get:
+      tags:
+        - 인센티브 지급기록 관리
+      description: 인센티브 지급 모든 정보 조회
+      parameters:
+        - $ref: "#/definitions/AuthHeader"
+      responses:
+        200:
+          description: OK
+        404:
+          description: Request Failed        
+
+  /incentive/query/user:
+    post:
+      tags:
+        - 인센티브 지급기록 관리
+      description: 인센티브 지급 사용자 정보 조회
+      parameters:
+        - $ref: "#/definitions/AuthHeader"
+        - name: 인센티브 지급 정보 조회
+          in: body
+          required: true
+          description: The logs of trade to retrieve          
+          schema: 
+            $ref: "#/definitions/IncentiveBody2"
+      responses:
+        200:
+          description: OK
+        404:
+          description: Request Failed          
+
+  /token/generate:
+      post:
+        tags:
+          - 인센티브 토큰 발급
+        description: Send amount of token from owner endpoint
+        parameters:
+          - $ref: "#/definitions/AuthHeader"
+          - name: generate
+            in: body
+            description: generate token
+            required: true
+            schema:
+              $ref: "#/definitions/TokenGenerateBody"
+        responses:
+          200:
+            description: OK
+          404:
+            description: Request Failed
+
+
+  /token/totalSupply:
+    get:
+      tags:
+        - 인센티브 토큰 관리
+      description: Total token supply
+      parameters:
+        - $ref: "#/definitions/AuthHeader"
+      responses:
+        200:
+          description: OK
+        404:
+          description: Request Failed
+
+  /token/name:
+    get:
+      tags:
+        - 인센티브 토큰 관리
+      description: Token name
+      parameters:
+        - $ref: "#/definitions/AuthHeader"
+      responses:
+        200:
+          description: OK
+        404:
+          description: Request Failed
+
+          
+  /token/balanceOf/{userId}:
+    get:
+      tags:
+        - 인센티브 토큰 관리
+      description: Return the amount of tokens the user has
+      parameters:
+        - $ref: "#/definitions/AuthHeader"
+        - name: userId
+          in: path
+          required: true
+          description: The ID of user to retrieve
+          type: string
+          default: user1
+      responses:
+        200:
+          description: OK
+        404:
+          description: Request Failed
+
+  /token/transfer:
+    post:
+      tags:
+        - 인센티브 토큰 관리
+      description: Send amount of token from owner endpoint
+      parameters:
+        - $ref: "#/definitions/AuthHeader"
+        - name: transfer
+          in: body
+          description: transfer token
+          required: true
+          schema:
+            $ref: "#/definitions/TokenTransferBody"
+      responses:
+        200:
+          description: OK
+        404:
+          description: Request Failed
+
+  /token/approve:
+    post:
+      tags:
+        - 인센티브 토큰 관리
+      description: ...
+      parameters:
+        - $ref: "#/definitions/AuthHeader"
+        - name: approve
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/ApproveBody"
+      responses:
+        200:
+          description: OK
+        404:
+          description: Request Failed
+
+  /token/allowance:
+    post:
+      tags:
+        - 인센티브 토큰 관리
+      description: ...
+      parameters:
+        - $ref: "#/definitions/AuthHeader"
+        - name: allowance
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/AllowanceBody"
+      responses:
+        200:
+          description: OK
+        404:
+          description: Request Failed
+
+  /token/transferFrom:
+    post:
+      tags:
+        - 인센티브 토큰 관리
+      description: ...
+      parameters:
+        - $ref: "#/definitions/AuthHeader"
+        - name: transferFrom
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/TransferFromBody"
+      responses:
+        200:
+          description: OK
+        404:
+          description: Request Failed
+
+  /spec:
+    get:
+      tags:
+        - Specification
+      responses:
+        200:
+          description: Return the API specification

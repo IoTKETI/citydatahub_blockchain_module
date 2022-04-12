@@ -1,0 +1,53 @@
+{
+    "network-config": {
+        "orderer0": {
+            "url": "grpcs://localhost:7050",
+            "server-hostname": "orderer0.cityhub.org",
+            "tls_cacerts": "../config/crypto-config/ordererOrganizations/cityhub.org/orderers/orderer0.cityhub.org/tls/ca.crt"
+        },
+        "orderer1": {
+            "url": "grpcs://localhost:8050",
+            "server-hostname": "orderer1.cityhub.org",
+            "tls_cacerts": "../config/crypto-config/ordererOrganizations/cityhub.org/orderers/orderer1.cityhub.org/tls/ca.crt"
+        },
+        "orderer2": {
+            "url": "grpcs://localhost:9050",
+            "server-hostname": "orderer2.cityhub.org",
+            "tls_cacerts": "../config/crypto-config/ordererOrganizations/cityhub.org/orderers/orderer2.cityhub.org/tls/ca.crt"
+        },
+        "n2m": {
+            "name": "N2M",
+            "mspid": "n2mMSP",
+            "ca": "https://localhost:7054",
+            "peers": {
+                "peer0": {
+                    "requests": "grpcs://localhost:7051",
+                    "events": "grpcs://localhost:7051",
+                    "server-hostname": "peer0.n2m.cityhub.org",
+                    "tls_cacerts": "../config/crypto-config/peerOrganizations/n2m.cityhub.org/peers/peer0.n2m.cityhub.org/tls/ca.crt"
+                }
+            },
+            "admin": {
+                "key": "../config/crypto-config/peerOrganizations/n2m.cityhub.org/users/Admin@n2m.cityhub.org/msp/keystore",
+                "cert": "../config/crypto-config/peerOrganizations/n2m.cityhub.org/users/Admin@n2m.cityhub.org/msp/signcerts"
+            }
+        },
+        "pnu": {
+            "name": "PNU",
+            "mspid": "pnuMSP",
+            "ca": "https://localhost:8054",
+            "peers": {
+                "peer0": {
+                    "requests": "grpcs://localhost:9051",
+                    "events": "grpcs://localhost:9051",
+                    "server-hostname": "peer0.pnu.cityhub.org",
+                    "tls_cacerts": "../config/crypto-config/peerOrganizations/pnu.cityhub.org/peers/peer0.pnu.cityhub.org/tls/ca.crt"
+                }
+            },
+            "admin": {
+                "key": "../config/crypto-config/peerOrganizations/pnu.cityhub.org/users/Admin@pnu.cityhub.org/msp/keystore",
+                "cert": "../config/crypto-config/peerOrganizations/pnu.cityhub.org/users/Admin@pnu.cityhub.org/msp/signcerts"
+            }
+        }
+    }
+}

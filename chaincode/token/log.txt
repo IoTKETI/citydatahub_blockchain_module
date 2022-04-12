@@ -1,0 +1,3 @@
+[34m2021-05-20 10:34:07.984 KST [chaincodeCmd] checkChaincodeCmdParams -> INFO 001[0m Using default escc
+[34m2021-05-20 10:34:07.984 KST [chaincodeCmd] checkChaincodeCmdParams -> INFO 002[0m Using default vscc
+Error: could not assemble transaction, err proposal response was not successful, error code 500, msg error starting container: error starting container: Post http://unix.sock/containers/create?name=dev-peer1.n2m.cityhub.org-tokencc-1.0: dial unix /host/var/run/docker.sock: connect: no such file or directory

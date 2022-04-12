@@ -1,0 +1,4 @@
+./dist/config/crypto-config
+./dist/config/wallet
+node_modules
+dist
