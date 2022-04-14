@@ -21,7 +21,7 @@ Centos 8
 2. 데이터 허브 서비스의 블록체인에 인증 정보 생성 및 저장
 3. 토큰 인센티브 서비스 생성/조회/전송/관리 기능
 
-<img alt="1.Overview" src="https://github.com/IoTKETI/citydatahub_blockchain/blob/main/images/1_Blockchain_Based_Incentive_Platform_SW/1.Overview_final.png">
+![1 Overview_final](https://user-images.githubusercontent.com/35214863/163293767-0adfd919-2cbe-4486-901a-30d84a063520.png)
 
 ## 1.2 사양
 
@@ -30,7 +30,7 @@ Centos 8
 3. RAFT 합의 알고리즘을 이용한 트랜잭션 구현
 
 ## 1.3 아키텍처
-<img alt="3.Blockchain_Based_Incentive_Platform_Architecture" src="https://github.com/IoTKETI/citydatahub_blockchain/blob/main/images/1_Blockchain_Based_Incentive_Platform_SW/3.Blockchain_Based_Incentive_Platform_Architecture_final.png">
+![3 Blockchain_Based_Incentive_Platform_Architecture_final](https://user-images.githubusercontent.com/35214863/163293771-8e141b95-319a-4ca0-a843-93e8aa3e3cc2.png)
 
 1. API Controller : 유저 관리, 토큰 관리(토큰 발급, 전송 등), 인센티브 관리(허브 활동 인센티브 제공, 인센티브 총액 확인 등) 요청 관리 모듈
 2. Service : JWT 관리, 블록체인 Function 관리, DB 관리 모듈
