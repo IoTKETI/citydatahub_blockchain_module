@@ -37,8 +37,6 @@ Centos 8
 3. Common : Fabric SDK, logger 등의 기능 제공
 4. Blockchain : 하이퍼레저 패브릭 블록체인 네트워크 (erc20 체인코드 구축)
 
-<img alt="4.Blockchain_Based_Incentive_Platform_Flow" src="https://github.com/IoTKETI/citydatahub_blockchain/blob/main/images/1_Blockchain_Based_Incentive_Platform_SW/4.Blockchain_Based_Incentive_Platform_Flow.png">
-
 * API Gateway와 블록체인 연동
   1. Data Hub 요청 (인센티브 제공, 인센티브 총액확인, 인센티브 히스토리 확인) - AuthHeader + Body
   2. User 확인 요청
