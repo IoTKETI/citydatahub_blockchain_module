@@ -233,15 +233,13 @@ function setupChaincode() {
       -c "mkdir /opt/go/src/github.com/ && \
       cp -r /vendor/github.com/pkg /opt/gopath/src/github.com/ && \
       cp -r /vendor/github.com/s7techlab /opt/gopath/src/github.com/ && \
+      cp -r /vendor/github.com/golang /opt/gopath/src/github.com/ && \
+      cp -r /vendor/github.com/google.golang.org /opt/gopath/src/ && \
+
       cp -r /vendor/github.com/pkg /opt/go/src/github.com/ && \
       cp -r /vendor/github.com/s7techlab /opt/go/src/github.com/ && \
-      pushd \"/opt/gopath/src/github.com/chaincode/${CC_NAME}\" && go get && popd && \
-      cp -r /vendor/github.com/pkg /opt/gopath/src/github.com/ && \
-      cp -r /vendor/github.com/s7techlab /opt/gopath/src/github.com/ && \
-      cp -r /vendor/github.com/pkg /opt/go/src/github.com/ && \
-      cp -r /vendor/github.com/s7techlab /opt/go/src/github.com/"
-
-
+      cp -r /vendor/github.com/golang /opt/go/src/github.com/ && \
+      cp -r /vendor/github.com/google.golang.org /opt/go/src/"
 }
 
 function packageChaincode() {
