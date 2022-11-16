@@ -108,9 +108,9 @@ export class InvokeService {
                 }
             } else {
                 logger.error(
-                    'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...'
+                    'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...' + results
                 );
-                return 'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...';
+                return 'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...' + results;
             }
 
         } catch (err) {
@@ -120,9 +120,6 @@ export class InvokeService {
                 err;
         }
     }
-
-
-
 
     async invokeChaincode(
         peerNames: string[], channelName: string,
@@ -219,9 +216,9 @@ export class InvokeService {
                 }
             } else {
                 logger.error(
-                    'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...'
+                    'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...' + results
                 );
-                return 'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...';
+                return 'Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...' + results;
             }
 
         } catch (err) {

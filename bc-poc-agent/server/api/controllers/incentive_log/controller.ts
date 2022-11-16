@@ -3,6 +3,8 @@ import QureyService from '../../services/query.service';
 import InvokeService from '../../services/invoke.service';
 import l from '../../../common/logger';
 import authorizationService from '../../services/authorization.service';
+import { resultInfoType } from '../../model/reponse'
+import {GetCurrentTimestamp} from '../../../common/utils'
 
 export class ReturnValues {
   constructor(public readonly result: string) {}
@@ -14,7 +16,7 @@ export class Controller {
   static channelName: string = 'marketplace-channel';
   static peerNames: string[] = ['peer0'];
   static org:string='n2m'; 
-  static username: string = 'jouk';
+  static username: string = 'admin';
 
   async putIncentiveWithHistory(req: Request, res: Response) {
     const decoded = authorizationService.verify(req);
@@ -28,8 +30,12 @@ export class Controller {
       const result = await InvokeService.invokeChaincode(Controller.peerNames, Controller.channelName, Controller.chaincodeName, fcn, args, Controller.username, Controller.org);
       const val = new ReturnValues(result);
       const serialized = JSON.stringify(val);
-
-      res.send(serialized).status(200).end();
+      const generateResponse: resultInfoType = {  
+        data: serialized,
+        date: GetCurrentTimestamp()
+      }
+      const resultSerialized = JSON.stringify(generateResponse);
+      res.send(resultSerialized).status(200).end();
     } catch (err) {
       l.info('Invoke IncentiveLogging process failed');
       res.status(404).end();

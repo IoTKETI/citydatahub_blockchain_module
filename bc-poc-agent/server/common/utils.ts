@@ -21,3 +21,17 @@ export function getErrorMessage(field: string) {
     };
     return response;
 }
+
+export function GetCurrentTimestamp(): string {
+    const today = new Date();
+    const year = today.getFullYear(); 
+    const month = today.getMonth() + 1; 
+    const date = today.getDate();
+    const hour = today.getHours();
+    const minute = today.getMinutes();
+    const seconds = today.getSeconds(); 
+    const milli = today.getMilliseconds(); 
+
+    const dateString = year.toString().substr(2, 2) + month.toString().padStart(2, '0') + date.toString().padStart(2, '0') + hour.toString().padStart(2, '0') + minute.toString().padStart(2, '0') + seconds.toString().padStart(2, '0') + milli.toString().padStart(2, '0');
+    return dateString;
+};

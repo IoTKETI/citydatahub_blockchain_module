@@ -4,3 +4,5 @@ sudo cp -r ${PWD}/../build/channel-artifacts/crypto-config/peerOrganizations ${P
 sudo cp -r ${PWD}/../build/channel-artifacts/crypto-config/ordererOrganizations ${PWD}/server/config/crypto-config
 sudo chmod -R 777 ${PWD}/server/config/crypto-config
 cd ${PWD}/server/config/crypto-config && ls
+
+npm run dev

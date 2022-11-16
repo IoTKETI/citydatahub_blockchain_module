@@ -4,6 +4,8 @@ import InvokeService from '../../services/invoke.service';
 import l from '../../../common/logger';
 import authorizationService from '../../services/authorization.service';
 import { mapHttpRequest } from 'pino-std-serializers';
+import { resultInfoType } from '../../model/reponse'
+import {GetCurrentTimestamp} from '../../../common/utils'
 
 export class ReturnValues {
   constructor(public readonly result: string) {}
@@ -14,7 +16,9 @@ export class Controller {
   static channelName: string = 'marketplace-channel';
   static peerNames: string[] = ['peer0'];
   static org:string='n2m'; 
-  static username: string = 'jouk';
+  static username: string = 'admin';
+
+
   async init(req: Request, res: Response) {
   }
 
@@ -27,14 +31,17 @@ export class Controller {
       const result = await InvokeService.invokeChaincode(Controller.peerNames, Controller.channelName, Controller.chaincodeName, fcn, args, Controller.username, Controller.org);
       const val = new ReturnValues(result);
       const serialized = JSON.stringify(val);
-
-      res.send(serialized).status(200).end();
+      const generateResponse: resultInfoType = {  
+        data: serialized, 
+        date: GetCurrentTimestamp()
+      }
+      const resultSerialized = JSON.stringify(generateResponse);
+      res.send(resultSerialized).status(200).end();
     } catch (err) {
-      l.info('invoke failed');
+      l.info('invoke err');
       res.status(404).end();
     }
   }
-
 
   async totalSupply(req: Request, res: Response) {
     const decoded = authorizationService.verify(req);
@@ -45,7 +52,12 @@ export class Controller {
       const result = await QureyService.queryChaincode(Controller.peerNames[0], Controller.channelName, Controller.chaincodeName, args, fcn, Controller.username, Controller.org);
       const val = new ReturnValues(result);
       const serialized = JSON.stringify(val);
-      res.send(serialized).status(200).end();
+      const generateResponse: resultInfoType = {  
+        data: serialized,
+        date: GetCurrentTimestamp()
+      }
+      const resultSerialized = JSON.stringify(generateResponse);
+      res.send(resultSerialized).status(200).end();
     } catch (err) {
       l.info('Query failed');
       l.error(err);
@@ -62,7 +74,12 @@ export class Controller {
       const result = await QureyService.queryChaincode(Controller.peerNames[0], Controller.channelName, Controller.chaincodeName, args, fcn, Controller.username, Controller.org);
       const val = new ReturnValues(result);
       const serialized = JSON.stringify(val);
-      res.send(serialized).status(200).end();
+      const generateResponse: resultInfoType = {  
+        data: serialized,
+        date: GetCurrentTimestamp()
+      }
+      const resultSerialized = JSON.stringify(generateResponse);
+      res.send(resultSerialized).status(200).end();
     } catch (err) {
       l.info('Query failed');
       res.status(404).end();
@@ -95,13 +112,19 @@ export class Controller {
     const userId: string = req.params['userId'];
     const fcn: string = 'balanceOf';
     const args: string[] = [userMSP, userId];
+    console.log(args)
 
     try {
       console.log(args);
       const result = await QureyService.queryChaincode(Controller.peerNames[0], Controller.channelName, Controller.chaincodeName, args, fcn, Controller.username, Controller.org);
       const val = new ReturnValues(result);
       const serialized = JSON.stringify(val);
-      res.send(serialized).status(200).end();
+      const generateResponse: resultInfoType = {  
+        data: serialized,
+        date: GetCurrentTimestamp()
+      }
+      const resultSerialized = JSON.stringify(generateResponse);
+      res.send(resultSerialized).status(200).end();
     } catch (err) {
       l.info('Query failed');
       res.status(404).end();
@@ -121,10 +144,14 @@ export class Controller {
       console.log(result)
       const val = new ReturnValues(result);
       const serialized = JSON.stringify(val);
-      res.send(serialized).status(200).end();
+      const generateResponse: resultInfoType = {  
+        data: serialized,
+        date: GetCurrentTimestamp()
+      }
+      const resultSerialized = JSON.stringify(generateResponse);
+      res.send(resultSerialized).status(200).end();
     } catch (err) {
-      console.log(err)
-      l.info('invoke failed');
+      l.info('invoke err');
       res.status(404).end();
     }
   }
@@ -134,13 +161,19 @@ export class Controller {
     const fromUserMspId: string = 'n2mMSP';
     const toUserMspId: string = 'n2mMSP';
     const args: string[] = [fromUserMspId, req.body.ownerId, toUserMspId, req.body.spenderId, req.body.amount];
+    console.log(req.body)
     const fcn: string = 'approve';
     
     try {
       const result = await InvokeService.invokeChaincode(Controller.peerNames, Controller.channelName, Controller.chaincodeName, fcn, args, Controller.username, Controller.org);
       const val = new ReturnValues(result);
       const serialized = JSON.stringify(val);
-      res.send(serialized).status(200).end();
+      const generateResponse: resultInfoType = {  
+        data: serialized,
+        date: GetCurrentTimestamp()
+      }
+      const resultSerialized = JSON.stringify(generateResponse);
+      res.send(resultSerialized).status(200).end();
     } catch (err) {
       l.info('invoke failed');
       res.status(404).end();
@@ -152,17 +185,20 @@ export class Controller {
     const decoded = authorizationService.verify(req);
     const args: string[] = ['n2mMSP', req.body.ownerId, 'n2mMSP', req.body.spenderId];
     const fcn: string = 'allowance';
-
     try {
       const result = await QureyService.queryChaincode(Controller.peerNames[0], Controller.channelName, Controller.chaincodeName, args, fcn, Controller.username, Controller.org);
       const val = new ReturnValues(result);
       const serialized = JSON.stringify(val);
-      res.send(serialized).status(200).end();
+      const generateResponse: resultInfoType = {  
+        data: serialized,
+        date: GetCurrentTimestamp()
+      }
+      const resultSerialized = JSON.stringify(generateResponse);
+      res.send(resultSerialized).status(200).end();
     } catch (err) {
       l.info('Query failed');
       res.status(404).end();
     }
-
   }
 
   async transferFrom(req: Request, res: Response) {
@@ -174,7 +210,12 @@ export class Controller {
       const result = await InvokeService.invokeChaincode(Controller.peerNames, Controller.channelName, Controller.chaincodeName, fcn, args, Controller.username, Controller.org);
       const val = new ReturnValues(result);
       const serialized = JSON.stringify(val);
-      res.send(serialized).status(200).end();
+      const generateResponse: resultInfoType = {  
+        data: serialized,
+        date: GetCurrentTimestamp()
+      }
+      const resultSerialized = JSON.stringify(generateResponse);
+      res.send(resultSerialized).status(200).end();
     } catch (err) {
       l.info('invoke failed');
       res.status(404).end();
@@ -223,4 +264,5 @@ export class Controller {
 
   }
 }
+
 export default new Controller();

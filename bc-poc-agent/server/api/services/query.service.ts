@@ -40,7 +40,6 @@ export class QueryService {
       let result: string;
 
       const responsePayloads = await channel.queryByChaincode(request);
-
       if (responsePayloads) {
         responsePayloads.forEach((rp: Buffer) => {
           result = rp.toString('utf8');

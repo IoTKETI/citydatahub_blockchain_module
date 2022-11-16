@@ -1,6 +1,8 @@
 package erc20
 
 import (
+	"strconv"
+
 	"github.com/pkg/errors"
 	"github.com/s7techlab/cckit/identity"
 	r "github.com/s7techlab/cckit/router"
@@ -16,6 +18,11 @@ var (
 	ErrNotEnoughFunds                   = errors.New(`not enough funds`)
 	ErrForbiddenToTransferToSameAccount = errors.New(`forbidden to transfer to same account`)
 	ErrSpenderNotHaveAllowance          = errors.New(`spender not have allowance for amount`)
+	ErrEmptyUserVariable								= errors.New(`empty user variable`)
+	ErrEmptyAmountVariable							= errors.New(`empty amount variable`)
+	ErrCallByOnlyAdmin									= errors.New(`this function is called by only admin`)
+	ErrSameInvokerAndFrom								= errors.New(`use the transfer because of same ID (invoker and from)`)
+	ErrDonotSendSelf										= errors.New(`do not send self`)
 )
 
 type (
@@ -55,8 +62,14 @@ func invokeSignIn(c r.Context) (interface{}, error) {
 }
 
 func invokeGenerate(c r.Context) (interface{}, error) {
+	amount := c.ParamInt(`ammount`)
+
+	if amount == 0 {
+		return nil, ErrEmptyAmountVariable
+	}
+
 	totalVal, _ := c.State().GetInt(TotalSupplyKey, 0)
-	totalVal += c.ParamInt(`ammount`)
+	totalVal += amount
 
 	invokerBalance, err := getBalance(c, OwnerMSP, OwnerID)
 
@@ -96,6 +109,18 @@ func invokeTransfer(c r.Context) (interface{}, error) {
 	toId := c.ParamString(`toId`)
 
 	amount := c.ParamInt(`amount`)
+
+	if fromId != "admin" {
+		return nil, ErrCallByOnlyAdmin
+	}
+
+	if (fromId == "" || toId == "" || fromId == "sampleAdmin" || fromId == "sampleUser") {
+		return nil, ErrEmptyUserVariable
+	}
+
+	if amount == 0 {
+		return nil, ErrEmptyAmountVariable
+	}
 
 	if fromMspId == toMspId && fromId == toId {
 		return nil, ErrForbiddenToTransferToSameAccount
@@ -141,7 +166,25 @@ func invokeTransfer(c r.Context) (interface{}, error) {
 }
 
 func queryAllowance(c r.Context) (interface{}, error) {
-	return getAllowance(c, c.ParamString(`ownerMspId`), c.ParamString(`ownerId`), c.ParamString(`spenderMspId`), c.ParamString(`spenderId`))
+	ownerMspId := c.ParamString(`ownerMspId`)
+	ownerId := c.ParamString(`ownerId`)
+	spenderMspId := c.ParamString(`spenderMspId`)
+	spenderId := c.ParamString(`spenderId`)
+	if (spenderId == "" || ownerId == "" || spenderId == "sampleAdmin" || ownerId == "sampleUser") {
+		return nil, ErrEmptyUserVariable
+	}
+
+	if ownerMspId == spenderMspId && spenderId == ownerId {
+		return nil, ErrForbiddenToTransferToSameAccount
+	}
+	
+	allowanceAmount, err := getAllowance(c, ownerMspId, ownerId, spenderMspId, spenderId)
+	if err != nil {
+		return nil, err
+	}
+	resMsg := strconv.Itoa(allowanceAmount) + " is the allownace of " + spenderId + " for " + ownerId
+
+	return resMsg, nil
 }
 
 func invokeApprove(c r.Context) (interface{}, error) {
@@ -150,6 +193,18 @@ func invokeApprove(c r.Context) (interface{}, error) {
 	spenderMspId := c.ParamString(`spenderMspId`)
 	spenderId := c.ParamString(`spenderId`)
 	amount := c.ParamInt(`amount`)
+
+	if (spenderId == "" || ownerId == "" || spenderId == "sampleAdmin" || ownerId == "sampleUser") {
+		return nil, ErrEmptyUserVariable
+	}
+
+	if amount == 0 {
+		return nil, ErrEmptyAmountVariable
+	}
+
+	if ownerMspId == spenderMspId && spenderId == ownerId {
+		return nil, ErrForbiddenToTransferToSameAccount
+	}
 
 	_, err := identity.FromStub(c.Stub())
 	if err != nil {
@@ -186,6 +241,26 @@ func invokeTransferFrom(c r.Context) (interface{}, error) {
 	toMspId := c.ParamString(`toMspId`)
 	toId := c.ParamString(`toId`)
 	amount := c.ParamInt(`amount`)
+
+	if (invokerId == "" || fromId == "" || toId == "sampleAdmin" || invokerId == "sampleAdmin" || fromId == "sampleUser1"|| toId == "sampleUser2") {
+		return nil, ErrEmptyUserVariable
+	}
+
+	if invokerMspId == fromMspId && invokerId == fromId {
+		return nil, ErrSameInvokerAndFrom
+	}
+
+	if invokerMspId == toMspId && invokerId == toId {
+		return nil, ErrDonotSendSelf
+	}
+
+	if amount == 0 {
+		return nil, ErrEmptyAmountVariable
+	}
+
+	if fromMspId == toMspId && toId == fromId {
+		return nil, ErrForbiddenToTransferToSameAccount
+	}
 
 	_, err := identity.FromStub(c.Stub())
 	if err != nil {
